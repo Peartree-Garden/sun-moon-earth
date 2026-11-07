@@ -1,6 +1,14 @@
 import { moonState, subsolarPoint, solarHourAt } from "../astro.js";
 import { HOME_LON, HOME_NAME } from "../config.js";
 
+// Points of a five-pointed star centred on (x, y).
+const star = (x, y, outer, inner) =>
+  Array.from({ length: 10 }, (_, i) => {
+    const r = i % 2 === 0 ? outer : inner, a = (Math.PI / 5) * i - Math.PI / 2;
+    return `${(x + r * Math.cos(a)).toFixed(1)},${(y + r * Math.sin(a)).toFixed(1)}`;
+  }).join(" ");
+
+const STAR_COLOR = "#ff3b3b";
 const SIZE = 320, CX = 160, CY = 170, R = 100, RING = 140;
 
 export default function EarthView({ now }) {
@@ -23,8 +31,8 @@ export default function EarthView({ now }) {
         <linearGradient id="earthGrad" gradientUnits="userSpaceOnUse"
           x1="0" y1={CY + offset + R} x2="0" y2={CY + offset - R}>
           <stop offset="0" stopColor="rgb(10,20,70)" />
-          <stop offset="0.5" stopColor="rgb(235,150,30)" />
-          <stop offset="1" stopColor="rgb(255,240,90)" />
+          <stop offset="0.5" stopColor="rgb(40,110,210)" />
+<stop offset="1" stopColor="rgb(160,220,255)" />
         </linearGradient>
         <radialGradient id="sunGlow">
           <stop offset="0" stopColor="#fff6b0" />
@@ -42,7 +50,7 @@ export default function EarthView({ now }) {
         <text x={CX - R + 34} y={CY + 4}>SUNSET</text>
       </g>
       <circle cx={CX} cy={CY} r="2.5" fill="#fff" />
-      <circle cx={hx} cy={hy} r="6" fill="#00ffff" stroke="#06060a" strokeWidth="2" />
+      <polygon points={star(hx, hy, 10, 4.2)} fill={STAR_COLOR} stroke="#06060a" strokeWidth="1.5" strokeLinejoin="round" />
       <text x={hx} y={hy + (hy > CY ? 20 : -12)} textAnchor="middle" className="svg-label">{HOME_NAME}</text>
       <circle cx={mx} cy={my} r="8" fill="#e1e1f0" />
     </svg>

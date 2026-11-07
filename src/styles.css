@@ -10,8 +10,6 @@ main {
   padding: max(20px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
 }
 .time { font-size: clamp(56px, 18vw, 96px); font-weight: 700; color: var(--accent); letter-spacing: .04em; line-height: 1; }
-.colon { animation: blink 2s steps(1) infinite; }
-@keyframes blink { 50% { opacity: .25; } }
 nav { display: flex; gap: 8px; justify-content: center; margin: 18px 0 8px; }
 nav button {
   font: inherit; color: var(--dim); background: none; border: 1px solid #2a2a38;
@@ -20,7 +18,7 @@ nav button {
 nav button.on { color: var(--bg); background: var(--accent); border-color: var(--accent); }
 .view { width: min(100%, 340px); height: auto; display: block; margin: 8px auto; }
 .view.moon { width: min(80%, 280px); }
-.svg-label { fill: var(--cyan); font-size: 13px; font-family: inherit; }
+.svg-label { fill: #ff3b3b; font-size: 13px; font-family: inherit; }
 .label { color: var(--dim); text-transform: uppercase; letter-spacing: .14em; font-size: 12px; margin: 14px 0 2px; }
 .big { font-size: clamp(20px, 6vw, 28px); margin: 2px 0; font-weight: 700; }
 .place { color: var(--cyan); }
