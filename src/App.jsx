@@ -1,0 +1,89 @@
+import { useEffect, useState } from "react";
+import { moonState, subsolarPoint, describePoint, formatLatLon, nextPhase } from "./astro.js";
+import { SUN_LABEL, UTC_OFFSET_HOURS, HOME_NAME } from "./config.js";
+import { moonColor } from "./color.js";
+import EarthView from "./components/EarthView.jsx";
+import MoonView from "./components/MoonView.jsx";
+import Ticker from "./components/Ticker.jsx";
+import Links from "./components/Links.jsx";
+import Sky from "./components/Sky.jsx";
+
+const pad = (n) => String(n).padStart(2, "0");
+
+function clock(now) {
+  const t = new Date(now.getTime() + UTC_OFFSET_HOURS * 3600000);
+  return { hh: pad(t.getUTCHours()), mm: pad(t.getUTCMinutes()) };
+}
+
+const fmtDay = (d) =>
+  new Date(d.getTime() + UTC_OFFSET_HOURS * 3600000).toLocaleString("en-CA", {
+    timeZone: "UTC", weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+  });
+
+export default function App() {
+  const [now, setNow] = useState(() => new Date());
+  const [tab, setTab] = useState(() => {
+    try { return localStorage.getItem("tab") || "earth"; } catch { return "earth"; }
+  });
+  // "Sun over" text is refreshed once a minute; the picture itself moves every second.
+  const [placeStamp, setPlaceStamp] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const t = new Date();
+      setNow(t);
+      setPlaceStamp((p) => (t - p >= 60000 ? t : p));
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const pick = (t) => { setTab(t); try { localStorage.setItem("tab", t); } catch {} };
+
+  const { hh, mm } = clock(now);
+  const moon = moonState(now);
+  const sun = subsolarPoint(placeStamp);
+  const place = describePoint(sun.lat, sun.lon);
+  const lit = moonColor(moon.illumination);
+
+  return (
+    <main>
+      <div className="time" aria-label="Time">{hh}<span className="colon">:</span>{mm}</div>
+
+      <nav>
+        <button className={tab === "earth" ? "on" : ""} onClick={() => pick("earth")}>Earth</button>
+        <button className={tab === "sky" ? "on" : ""} onClick={() => pick("sky")}>Sky</button>
+        <button className={tab === "moon" ? "on" : ""} onClick={() => pick("moon")}>Moon</button>
+        <button className={tab === "travel" ? "on" : ""} onClick={() => pick("travel")}>Travel</button>
+        <button className={tab === "links" ? "on" : ""} onClick={() => pick("links")}>Links</button>
+      </nav>
+
+      {tab === "earth" ? (
+        <section>
+          <EarthView now={now} />
+          <p className="label">{SUN_LABEL}</p>
+          <p className="big place">{place.text}</p>
+          <p className="small">{formatLatLon(sun.lat, sun.lon)}</p>
+          <p className="small how">Seen from space, above the North Pole. The sun is always at the top. The cyan dot is {HOME_NAME}, going round counter-clockwise once a day: noon at the top, sunrise on the right, sunset on the left, midnight at the bottom.</p>
+        </section>
+      ) : tab === "sky" ? (
+        <Sky now={now} />
+      ) : tab === "travel" ? (
+        <Ticker />
+      ) : tab === "links" ? (
+        <Links />
+      ) : (
+        <section>
+          <MoonView moon={moon} />
+          <p className="big" style={{ color: lit }}>{moon.name}</p>
+          <p className="small">{Math.round(moon.illumination * 100)}% lit</p>
+          <p className="label">Distance from Earth</p>
+          <p className="big dist">{Math.round(moon.distanceKm).toLocaleString("en-CA")} km</p>
+          <div className="next">
+            <div><span>Next full moon</span><b>{fmtDay(nextPhase(now, 180))}</b></div>
+            <div><span>Next new moon</span><b>{fmtDay(nextPhase(now, 0))}</b></div>
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}

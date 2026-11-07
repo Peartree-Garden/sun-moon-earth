@@ -1,0 +1,10 @@
+import { planetEquatorial, sunEquatorial, separation } from "../src/astro.js";
+const at = (s) => new Date(s);
+const P = (n, s) => planetEquatorial(at(s), n);
+console.log("Jupiter-Saturn 2020-12-21 18:00Z (expect ~0.1 deg):", separation(P("Jupiter", "2020-12-21T18:00:00Z"), P("Saturn", "2020-12-21T18:00:00Z")).toFixed(2));
+console.log("Venus-Jupiter 2023-03-01 22:00Z (expect ~0.5):", separation(P("Venus", "2023-03-01T22:00:00Z"), P("Jupiter", "2023-03-01T22:00:00Z")).toFixed(2));
+console.log("Mars opposition 2025-01-16 ~02Z: Mars-Sun separation (expect ~180):", separation(P("Mars", "2025-01-16T02:00:00Z"), sunEquatorial(at("2025-01-16T02:00:00Z"))).toFixed(1));
+console.log("Jupiter opposition 2025-12-07: sep (expect ~180):", separation(P("Jupiter", "2025-12-07T12:00:00Z"), sunEquatorial(at("2025-12-07T12:00:00Z"))).toFixed(1));
+console.log("Saturn opposition 2025-09-21: sep (expect ~180):", separation(P("Saturn", "2025-09-21T12:00:00Z"), sunEquatorial(at("2025-09-21T12:00:00Z"))).toFixed(1));
+const m = P("Mars", "2025-01-16T02:00:00Z"); console.log("Mars RA/Dec 2025-01-16 (expect ~ RA 8h 56m = 134 deg, Dec +22.5):", m.ra.toFixed(1), m.dec.toFixed(1));
+const s = P("Saturn", "2025-09-21T12:00:00Z"); console.log("Saturn 2025-09-21 (expect RA ~ 0h 07m ~ 1.9 deg, Dec ~ -3.6):", s.ra.toFixed(1), s.dec.toFixed(1));
