@@ -60,7 +60,7 @@ export default function App() {
       {tab === "earth" ? (
         <section>
           <EarthView now={now} />
-          <p className="label">{SUN_LABEL}</p>
+          <p className="label sunlabel">{SUN_LABEL}</p>
           <p className="big place">{place.text}</p>
           <p className="small">{formatLatLon(sun.lat, sun.lon)}</p>
           <p className="small how">Seen from space, above the North Pole. The sun is always at the top. The red star is {HOME_NAME}, going round counter-clockwise once a day: noon at the top, sunrise on the right, sunset on the left, midnight at the bottom.</p>
