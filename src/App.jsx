@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { moonState, subsolarPoint, describePoint, formatLatLon, nextPhase } from "./astro.js";
 import { SUN_LABEL, UTC_OFFSET_HOURS, HOME_NAME } from "./config.js";
 import { moonColor } from "./color.js";
@@ -8,6 +8,9 @@ import Ticker from "./components/Ticker.jsx";
 import Links from "./components/Links.jsx";
 import Sky from "./components/Sky.jsx";
 import RiseSet from "./components/RiseSet.jsx";
+
+// Left to right, as in the tab bar. Swiping moves one step along this list.
+const TABS = ["earth", "sky", "moon", "travel", "links"];
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -38,7 +41,27 @@ export default function App() {
     return () => clearInterval(id);
   }, []);
 
-  const pick = (t) => { setTab(t); try { localStorage.setItem("tab", t); } catch {} };
+  const [slide, setSlide] = useState("");
+  const pick = (t) => {
+    const from = TABS.indexOf(tab), to = TABS.indexOf(t);
+    if (from === to) return;
+    setSlide(to > from ? "from-right" : "from-left");
+    setTab(t);
+    try { localStorage.setItem("tab", t); } catch {}
+  };
+
+  // Swipe left or right anywhere on the screen to change tab (not past the first or last one).
+  const touch = useRef(null);
+  const onTouchStart = (e) => { const t = e.touches[0]; touch.current = { x: t.clientX, y: t.clientY }; };
+  const onTouchEnd = (e) => {
+    const s = touch.current; touch.current = null;
+    if (!s) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - s.x, dy = t.clientY - s.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;   // too short, or mostly vertical
+    const i = TABS.indexOf(tab) + (dx < 0 ? 1 : -1);
+    if (i >= 0 && i < TABS.length) pick(TABS[i]);
+  };
 
   const { hh, mm } = clock(now);
   const moon = moonState(now);
@@ -47,7 +70,7 @@ export default function App() {
   const lit = moonColor(moon.illumination);
 
   return (
-    <main>
+    <main onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div className="time" aria-label="Time">{hh}<span className="colon">:</span>{mm}</div>
 
       <nav>
@@ -58,6 +81,7 @@ export default function App() {
         <button className={tab === "links" ? "on" : ""} onClick={() => pick("links")}>Links</button>
       </nav>
 
+       <div key={tab} className={`pane ${slide}`}>
       {tab === "earth" ? (
         <section>
           <EarthView now={now} />
@@ -65,7 +89,7 @@ export default function App() {
           <p className="big place">{place.text}</p>
           <p className="small">{formatLatLon(sun.lat, sun.lon)}</p>
           <RiseSet now={now} />
-          <p className="small how">   Seen from space, above the North Pole. The sun is always at the top, so the whole Earth turns underneath it, counter-clockwise, once a day. The red dot is {HOME_NAME}. Places on the right are having sunrise and on the left sunset. The dark side is night.</p>
+          <p className="small how">Seen from space, above the North Pole. The sun is always at the top, so the whole Earth turns underneath it, counter-clockwise, once a day. The red dot is {HOME_NAME}. Places on the right are having sunrise and on the left sunset. The dark side is night.</p>
         </section>
       ) : tab === "sky" ? (
         <Sky now={now} />
@@ -86,6 +110,7 @@ export default function App() {
           </div>
         </section>
       )}
+      </div>
     </main>
   );
 }
