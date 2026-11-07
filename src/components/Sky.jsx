@@ -1,5 +1,5 @@
-import { sunAltAz, moonAltAz, riseSet, compassName, moonState, planetAltAz, PLANET_NAMES } from "../astro.js";
-import { HOME_LAT, HOME_LON, HOME_NAME, UTC_OFFSET_HOURS } from "../config.js";
+import { sunAltAz, moonAltAz, compassName, moonState, planetAltAz, PLANET_NAMES } from "../astro.js";
+import { HOME_LAT, HOME_LON, HOME_NAME } from "../config.js";
 import { useState } from "react";
 import useCompass from "../useCompass.js";
 
@@ -11,17 +11,6 @@ const PLANET_STYLE = {
 };
 const TELESCOPE = new Set(["Uranus", "Neptune"]);
 const SKY_MOON_COLOR = "#5aa0ff";   // the moon on the Sky chart is always this blue
-
-function localDayStart(now) {
-  const off = UTC_OFFSET_HOURS * 3600000;
-  return Math.floor((now.getTime() + off) / 86400000) * 86400000 - off;
-}
-const pad = (n) => String(n).padStart(2, "0");
-function hhmm(d) {
-  if (!d) return "none today";
-  const t = new Date(d.getTime() + UTC_OFFSET_HOURS * 3600000);
-  return `${pad(t.getUTCHours())}:${pad(t.getUTCMinutes())}`;
-}
 
 // A map of the sky around you: the middle is straight overhead, the edge is the horizon.
 // The direction you face (the compass heading, north when the compass is off) is at the top, east is to the right.
@@ -53,9 +42,6 @@ export default function Sky({ now }) {
   const sun = sunAltAz(now, HOME_LAT, HOME_LON);
   const moon = moonAltAz(now, HOME_LAT, HOME_LON);
   const ms = moonState(now);
-  const start = localDayStart(now);
-  const sunTimes = riseSet((d) => sunAltAz(d, HOME_LAT, HOME_LON), start);
-  const moonTimes = riseSet((d) => moonAltAz(d, HOME_LAT, HOME_LON), start);
   const sp = place(sun.alt, sun.az, heading), mp = place(moon.alt, moon.az, heading);
   const moonCol = SKY_MOON_COLOR;
   const daylight = sun.alt > -6;   // too bright a sky to see planets
@@ -124,8 +110,21 @@ export default function Sky({ now }) {
           {compass.status === "off" && "Hold the phone flat to turn the map"}
         </span>
       </div>
-      <p className="big">{describe("The sun", sun)}</p>
-      <p className="big" style={{ color: moonCol }}>{describe("The moon", moon)}</p>
+      <div className="legend">
+  <span>
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill="#fff6b0" opacity="0.25" />
+      <circle cx="12" cy="12" r="6.5" fill="#fff6aa" />
+    </svg>
+    Sun
+  </span>
+  <span>
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="6.5" fill={moonCol} stroke="#fff" strokeWidth="1.2" />
+    </svg>
+    Moon
+  </span>
+</div>
       <p className="label">Planets in the sky now</p>
       {planets.length === 0 ? (
         <p className="small">None above the horizon.</p>
@@ -138,12 +137,8 @@ export default function Sky({ now }) {
           </p>
         ))
       )}
-      <p className="small">Looking up at the sky from {HOME_NAME}: straight overhead is in the middle and the edge is the horizon. With the compass on, hold the phone flat and the direction you are facing is at the top. Faded markers outside the circle are below the horizon. In daylight the planets are shown faintly because they can't be seen.</p>
-
-      <div className="next">
-        <div><span>Sunrise / sunset</span><b>{hhmm(sunTimes.rise)} / {hhmm(sunTimes.set)}</b></div>
-        <div><span>Moonrise / moonset</span><b>{hhmm(moonTimes.rise)} / {hhmm(moonTimes.set)}</b></div>
-      </div>
+      <p className="small">Looking up at the sky from {HOME_NAME}: straight overhead is in the middle and the edge is the horizon. With the compass on, hold the phone flat and the direction you are facing is at the top. Faded markers outside the circle are below the horizon. </p>
+<p className="small"><em>If the compass seems off, wave your phone in a figure 8 a few times to recalibrate it.</em></p>
     </section>
   );
 }

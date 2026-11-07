@@ -2,7 +2,7 @@
 export const HOME_NAME = "Vernon";
 export const HOME_LON = -119.27;      // degrees east (west is negative)
 export const UTC_OFFSET_HOURS = -7;   // fixed all year, no daylight saving
-export const SUN_LABEL = "Sun over";
+export const SUN_LABEL = "Sun over:";
 
 // Birth moment: 10 PM in Lisbon on 25 Nov 1970. Portugal was on UTC+1 all year then, so that is 21:00 UTC.
 export const BIRTH_UTC = "1970-11-25T21:00:00Z";
