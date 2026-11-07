@@ -101,30 +101,31 @@ export default function Sky({ now }) {
         })()}
       </svg>
 
+      <p className="facing">
+        {compass.status === "on" && `Facing ${longName(compassName(heading))} (${Math.round(heading)}°)`}
+        {compass.status === "waiting" && "Looking for the compass…"}
+        {compass.status === "unavailable" && "No compass found on this device"}
+        {compass.status === "off" && "Hold the phone flat to turn the map"}
+      </p>
       <div className="compassbar">
         <button className={useCompassOn ? "on" : ""} onClick={toggleCompass}>{useCompassOn ? "Compass on" : "Use compass"}</button>
+      </div>
+      <p className="small" style={{ textAlign: "center" }}><em>If the compass seems off, wave your phone in a figure 8 a few times to recalibrate it.</em></p>
+      <div className="legend">
         <span>
-          {compass.status === "on" && `Facing ${longName(compassName(heading))} (${Math.round(heading)}°)`}
-          {compass.status === "waiting" && "Looking for the compass…"}
-          {compass.status === "unavailable" && "No compass found on this device"}
-          {compass.status === "off" && "Hold the phone flat to turn the map"}
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" fill="#fff6b0" opacity="0.25" />
+            <circle cx="12" cy="12" r="6.5" fill="#fff6aa" />
+          </svg>
+          Sun
+        </span>
+        <span>
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="6.5" fill={moonCol} stroke="#fff" strokeWidth="1.2" />
+          </svg>
+          Moon
         </span>
       </div>
-      <div className="legend">
-  <span>
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="11" fill="#fff6b0" opacity="0.25" />
-      <circle cx="12" cy="12" r="6.5" fill="#fff6aa" />
-    </svg>
-    Sun
-  </span>
-  <span>
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="6.5" fill={moonCol} stroke="#fff" strokeWidth="1.2" />
-    </svg>
-    Moon
-  </span>
-</div>
       <p className="label">Planets in the sky now</p>
       {planets.length === 0 ? (
         <p className="small">None above the horizon.</p>
@@ -137,8 +138,7 @@ export default function Sky({ now }) {
           </p>
         ))
       )}
-      <p className="small">Looking up at the sky from {HOME_NAME}: straight overhead is in the middle and the edge is the horizon. With the compass on, hold the phone flat and the direction you are facing is at the top. Faded markers outside the circle are below the horizon. </p>
-<p className="small"><em>If the compass seems off, wave your phone in a figure 8 a few times to recalibrate it.</em></p>
+      <p className="small">Looking up at the sky from {HOME_NAME}: straight overhead is in the middle and the edge is the horizon. With the compass on, hold the phone flat and the direction you are facing is at the top. Faded markers outside the circle are below the horizon. In daylight the planets are shown faintly because they can't be seen.</p>
     </section>
   );
 }
