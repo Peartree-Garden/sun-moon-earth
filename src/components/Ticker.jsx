@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { BIRTH_UTC, HOME_LAT } from "../config.js";
+import { HOME_LAT } from "../config.js";
+import { cityOf, formatOffset, formatUtc } from "../birth.js";
 import { chooseReference, describeRatio, lightTime } from "../references.js";
 
-const BIRTH = new Date(BIRTH_UTC).getTime();
 const SPIN_KMH = (2 * Math.PI * 6378.137 * Math.cos((HOME_LAT * Math.PI) / 180)) / 86164.1 * 3600;
 
 const ROWS = [
@@ -14,7 +14,8 @@ const ROWS = [
 
 const dayNumber = () => Math.floor(Date.now() / 86400000);
 
-export default function Ticker() {
+export default function Ticker({ profile, onEdit }) {
+  const BIRTH = profile.utcMs;
   const [t, setT] = useState(() => Date.now());
   const [shuffle, setShuffle] = useState(0);
   useEffect(() => {
@@ -43,9 +44,10 @@ export default function Ticker() {
       <button className="again" onClick={() => setShuffle((s) => s + 1)}>Show other comparisons</button>
       <details>
         <summary>How is this calculated?</summary>
-        <p>Each row is speed × time since birth (10 PM, 25 November 1970, Lisbon, which was 21:00 UTC). They are measured against different things, so they cannot be added together.</p>
+        <p>Each row is speed × time since birth ({profile.date}{profile.unknownTime ? ", time unknown so noon was used" : `, ${profile.time}`}, {profile.place || cityOf(profile.zone)} time, {formatOffset(profile.offsetMin)} then, which is {formatUtc(BIRTH)}). They are measured against different things, so they cannot be added together.</p>
         <p>The galaxy and universe speeds are estimates (the galactic one is good to about 10%). The universe's expansion is not counted, because it is not motion through space. Spin uses Vernon's latitude for the whole time.</p>
       </details>
+      <button className="linkbtn" onClick={onEdit}>Change birth info</button>
     </section>
   );
 }

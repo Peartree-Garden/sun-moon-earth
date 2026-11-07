@@ -67,3 +67,29 @@ main { touch-action: pan-y; min-height: 100dvh; }
 @keyframes fromRight { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
 @keyframes fromLeft { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .pane { animation: none !important; } }
+
+/* birth details form */
+.birth { text-align: left; margin-top: 12px; }
+.birth .big { text-align: center; margin-bottom: 8px; }
+.birth .small { font-size: 15px; line-height: 1.45; }
+.field { display: block; margin: 18px 0 6px; }
+.field > span { display: block; color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+.field input[type="date"], .field input[type="time"], .field input[type="text"] {
+  width: 100%; font: inherit; font-size: 18px; color: var(--fg); background: #0d0d16; border: 1px solid #2a2a38;
+  border-radius: 10px; padding: 12px; color-scheme: dark;
+}
+.field input:disabled { opacity: 0.4; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--dim); margin: 8px 0; line-height: 1.4; }
+.check input { width: 20px; height: 20px; margin-top: 2px; flex: none; }
+.match, .chosen button, .actions button, .linkbtn {
+  font: inherit; font-size: 16px; color: var(--fg); background: none; border: 1px solid #2a2a38; border-radius: 10px; padding: 12px 14px; cursor: pointer;
+}
+.match { display: block; width: 100%; text-align: left; margin-top: 6px; }
+.chosen { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 18px; }
+.preview { font-size: 15px; line-height: 1.45; color: var(--cyan); margin: 16px 0; }
+.actions { display: flex; gap: 12px; margin: 18px 0; }
+.actions .primary { color: var(--bg); background: var(--accent); border-color: var(--accent); font-weight: 700; }
+.actions .primary:disabled { opacity: 0.35; }
+.linkbtn { display: block; margin: 18px auto 8px; color: var(--accent); font-size: 15px; }
+
+.zoneline { font-size: 15px; color: var(--dim); margin: 8px 0 0; }

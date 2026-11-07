@@ -4,7 +4,7 @@ import { SUN_LABEL, UTC_OFFSET_HOURS, HOME_NAME } from "./config.js";
 import { moonColor } from "./color.js";
 import EarthView from "./components/EarthView.jsx";
 import MoonView from "./components/MoonView.jsx";
-import Ticker from "./components/Ticker.jsx";
+import Travel from "./components/Travel.jsx";
 import Links from "./components/Links.jsx";
 import Sky from "./components/Sky.jsx";
 import RiseSet from "./components/RiseSet.jsx";
@@ -94,7 +94,7 @@ export default function App() {
       ) : tab === "sky" ? (
         <Sky now={now} />
       ) : tab === "travel" ? (
-        <Ticker />
+        <Travel />
       ) : tab === "links" ? (
         <Links />
       ) : (
