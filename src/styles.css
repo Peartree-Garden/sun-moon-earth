@@ -93,3 +93,6 @@ main { touch-action: pan-y; min-height: 100dvh; }
 .linkbtn { display: block; margin: 18px auto 8px; color: var(--accent); font-size: 15px; }
 
 .zoneline { font-size: 15px; color: var(--dim); margin: 8px 0 0; }
+
+.ampm { font-size: 0.32em; margin-left: 0.25em; letter-spacing: .05em; }
+.hourtoggle { display: block; margin: 6px auto 0; font: inherit; font-size: 13px; color: var(--dim); background: none; border: 1px solid #2a2a38; border-radius: 999px; padding: 4px 12px; cursor: pointer; }

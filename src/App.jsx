@@ -14,9 +14,11 @@ const TABS = ["earth", "sky", "moon", "travel", "links"];
 
 const pad = (n) => String(n).padStart(2, "0");
 
-function clock(now) {
+function clock(now, hour12) {
   const t = new Date(now.getTime() + UTC_OFFSET_HOURS * 3600000);
-  return { hh: pad(t.getUTCHours()), mm: pad(t.getUTCMinutes()) };
+  const h = t.getUTCHours();
+  if (!hour12) return { hh: pad(h), mm: pad(t.getUTCMinutes()), ampm: "" };
+  return { hh: String(h % 12 || 12), mm: pad(t.getUTCMinutes()), ampm: h < 12 ? "AM" : "PM" };
 }
 
 const fmtDay = (d) =>
@@ -41,6 +43,16 @@ export default function App() {
     return () => clearInterval(id);
   }, []);
 
+  const [hour12, setHour12] = useState(() => {
+  try { return localStorage.getItem("hour12") === "1"; } catch { return false; }
+});
+const toggleHours = () => {
+  setHour12((v) => {
+    try { localStorage.setItem("hour12", v ? "0" : "1"); } catch {}
+    return !v;
+  });
+};
+
   const [slide, setSlide] = useState("");
   const pick = (t) => {
     const from = TABS.indexOf(tab), to = TABS.indexOf(t);
@@ -63,7 +75,7 @@ export default function App() {
     if (i >= 0 && i < TABS.length) pick(TABS[i]);
   };
 
-  const { hh, mm } = clock(now);
+  const { hh, mm, ampm } = clock(now, hour12);
   const moon = moonState(now);
   const sun = subsolarPoint(placeStamp);
   const place = describePoint(sun.lat, sun.lon);
@@ -71,7 +83,8 @@ export default function App() {
 
   return (
     <main onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <div className="time" aria-label="Time">{hh}<span className="colon">:</span>{mm}</div>
+      <div className="time" aria-label="Time">{hh}<span className="colon">:</span>{mm}{ampm && <span className="ampm">{ampm}</span>}</div>
+<button className="hourtoggle" onClick={toggleHours}>{hour12 ? "Switch to 24-hour" : "Switch to 12-hour"}</button>
 
       <nav>
         <button className={tab === "earth" ? "on" : ""} onClick={() => pick("earth")}>Earth</button>
