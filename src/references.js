@@ -13,10 +13,10 @@ export const REFERENCES = [
   { km: 2872.5e6, plural: "trips from the Sun to Uranus", single: "the distance from the Sun to Uranus" },
   { km: 4495e6, plural: "trips from the Sun to Neptune", single: "the distance from the Sun to Neptune" },
   { km: 5906e6 * 2, plural: "round trips from the Sun to Pluto", single: "a round trip from the Sun to Pluto" },
-  { km: 121 * AU, plural: "times the distance from the Sun to the edge of the Solar System's bubble (the heliopause)", single: "the distance from the Sun to the edge of the Solar System's bubble (the heliopause)" },
+  { km: 121 * AU, plural: "times the distance from the Sun to the Solar System's edge", single: "the distance from the Sun to the Solar System's edge" },
   { km: 2.5902e10, plural: "times the distance light travels in a day", single: "the distance light travels in a day" },
   { km: 1.813e11, plural: "times the distance light travels in a week", single: "the distance light travels in a week" },
-  { km: 2000 * AU, plural: "times the distance from the Sun to the inner edge of the Oort Cloud (roughly)", single: "the distance from the Sun to the inner edge of the Oort Cloud (roughly)" },
+  { km: 2000 * AU, plural: "times the distance from the Sun to the Oort Cloud's inner edge", single: "the distance from the Sun to the Oort Cloud's inner edge" },
   { km: 4.0175e13, partial: true, plural: "times the way to Proxima Centauri", single: "the way to Proxima Centauri, the nearest star" },
 ];
 
