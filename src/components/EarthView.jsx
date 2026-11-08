@@ -8,6 +8,10 @@ const OCEAN = "#2f6fd0", LAND = "#5aa86a", GREENLAND = "#f4f8ff";
 // These three numbers must match tools/make_land.py, which drew the land outlines.
 const SIZE = 320, CX = 160, CY = 170, R = 100, RING = 140;
 
+// The finished picture is the globe drawn above, shrunk a little and moved down to leave room for the Sun.
+const SCALE = 0.92, TOP = 288;                       // TOP = where the globe's centre sits in the final picture
+const HEIGHT = Math.round(TOP + RING * SCALE + 10);   // picture height
+
 const RAD = Math.PI / 180;
 
 export default function EarthView({ now }) {
@@ -32,7 +36,7 @@ export default function EarthView({ now }) {
   const mx = CX + RING * Math.cos(m), my = CY - RING * Math.sin(m);
 
   return (
-    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} role="img" aria-label="Earth seen from above the North Pole" className="view">
+    <svg viewBox={`0 0 ${SIZE} ${HEIGHT}`} role="img" aria-label="Earth seen from above the North Pole" className="view">
       <defs>
         <clipPath id="globeClip"><circle cx={CX} cy={CY} r={R} /></clipPath>
         <filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3" /></filter>
@@ -40,10 +44,23 @@ export default function EarthView({ now }) {
           <stop offset="0" stopColor="#fff6b0" />
           <stop offset="1" stopColor="#fff6b0" stopOpacity="0" />
         </radialGradient>
+        <linearGradient id="sunFadeGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="12">
+          <stop offset="0" stopColor="#fff" stopOpacity="0.75" />
+          <stop offset="1" stopColor="#fff" stopOpacity="1" />
+        </linearGradient>
+        <mask id="sunFade" maskUnits="userSpaceOnUse" x="0" y="0" width={SIZE} height="120">
+          <rect x="0" y="0" width={SIZE} height="120" fill="url(#sunFadeGrad)" />
+        </mask>
       </defs>
+
+      {/* The Sun is huge and far away: only part of it shows, cut off at the top edge. */}
+      <g mask="url(#sunFade)">
+        <circle cx={CX} cy="8" r="66" fill="url(#sunGlow)" />
+        <circle cx={CX} cy="8" r="27" fill="#fff6aa" />
+      </g>
+
+      <g transform={`translate(${CX * (1 - SCALE)} ${TOP - CY * SCALE}) scale(${SCALE})`}>
       <circle cx={CX} cy={CY} r={RING} fill="none" stroke="#2a2a38" strokeDasharray="2 6" />
-      <circle cx={CX} cy="22" r="22" fill="url(#sunGlow)" />
-      <circle cx={CX} cy="22" r="9" fill="#fff6aa" />
 
       <circle cx={CX} cy={CY} r={R} fill={OCEAN} />
       <g clipPath="url(#globeClip)">
@@ -66,10 +83,10 @@ export default function EarthView({ now }) {
         <text x={CX + R + 6} y={CY + 4} textAnchor="start">SUNRISE</text>
         <text x={CX - R - 6} y={CY + 4} textAnchor="end">SUNSET</text>
       </g>
-            <circle cx={CX} cy={CY} r="0.8" fill="#fff" fillOpacity="0.5" />
             <circle cx={hx} cy={hy} r="3.5" fill={DOT_COLOR} stroke="#06060a" strokeWidth="1" />
       <text x={hx} y={hy - 10} textAnchor="middle" className="svg-label" style={{ fill: "#fff" }}>{HOME_NAME}</text>
-      <circle cx={mx} cy={my} r="8" fill="#e1e1f0" />
+      <circle cx={mx} cy={my} r="9" fill="#e1e1f0" />
+      </g>
     </svg>
   );
 }
