@@ -46,6 +46,7 @@ export default function EarthView({ now }) {
         </radialGradient>
       </defs>
 
+      <text x="4" y="14" fontSize="11" style={{ fill: "var(--dim)" }}>not to scale</text>
       {/* The Sun is huge and far away: only part of it shows, cut exactly in half by the top edge. */}
       <circle cx={CX} cy="0" r="56" fill="url(#sunGlow)" />
       <circle cx={CX} cy="0" r="22" fill="#fff6aa" />
