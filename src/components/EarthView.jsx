@@ -6,10 +6,10 @@ const DOT_COLOR = "#ff3b3b";
 const OCEAN = "#2f6fd0", LAND = "#5aa86a", GREENLAND = "#f4f8ff";
 
 // These three numbers must match tools/make_land.py, which drew the land outlines.
-const SIZE = 320, CX = 160, CY = 170, R = 100, RING = 140;
+const SIZE = 320, CX = 160, CY = 170, R = 100, RING = 130;
 
 // The finished picture is the globe drawn above, shrunk a little and moved down to leave room for the Sun.
-const SCALE = 0.9, TOP = 255;                       // TOP = where the globe's centre sits in the final picture
+const SCALE = 0.86, TOP = 228;                       // TOP = where the globe's centre sits in the final picture
 const HEIGHT = Math.round(TOP + RING * SCALE + 8);   // picture height
 
 const RAD = Math.PI / 180;
