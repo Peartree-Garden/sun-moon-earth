@@ -11,7 +11,7 @@ export const LINK_GROUPS = [
     title: "Sun, Moon and planets",
     links: [
       { label: "NASA Eyes on the Solar System", note: "Live positions of planets and spacecraft", url: "https://eyes.nasa.gov/apps/solar-system/" },
-      { label: "Solar System Scope", note: "3D model of the Solar System", url: "https://www.solarsystemscope.com/" },
+      { label: "Sun, Earth and Moon in 3D", note: "Live 3D view of their positions", url: "https://en.tutiempo.net/astronomy/sun-earth-moon-3d.html" },
     ],
   },
 ];
