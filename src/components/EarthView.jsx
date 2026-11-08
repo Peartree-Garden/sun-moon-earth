@@ -9,8 +9,8 @@ const OCEAN = "#2f6fd0", LAND = "#5aa86a", GREENLAND = "#f4f8ff";
 const SIZE = 320, CX = 160, CY = 170, R = 100, RING = 140;
 
 // The finished picture is the globe drawn above, shrunk a little and moved down to leave room for the Sun.
-const SCALE = 0.92, TOP = 288;                       // TOP = where the globe's centre sits in the final picture
-const HEIGHT = Math.round(TOP + RING * SCALE + 10);   // picture height
+const SCALE = 0.9, TOP = 255;                       // TOP = where the globe's centre sits in the final picture
+const HEIGHT = Math.round(TOP + RING * SCALE + 8);   // picture height
 
 const RAD = Math.PI / 180;
 
@@ -44,20 +44,11 @@ export default function EarthView({ now }) {
           <stop offset="0" stopColor="#fff6b0" />
           <stop offset="1" stopColor="#fff6b0" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="sunFadeGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="12">
-          <stop offset="0" stopColor="#fff" stopOpacity="0.75" />
-          <stop offset="1" stopColor="#fff" stopOpacity="1" />
-        </linearGradient>
-        <mask id="sunFade" maskUnits="userSpaceOnUse" x="0" y="0" width={SIZE} height="120">
-          <rect x="0" y="0" width={SIZE} height="120" fill="url(#sunFadeGrad)" />
-        </mask>
       </defs>
 
-      {/* The Sun is huge and far away: only part of it shows, cut off at the top edge. */}
-      <g mask="url(#sunFade)">
-        <circle cx={CX} cy="8" r="66" fill="url(#sunGlow)" />
-        <circle cx={CX} cy="8" r="27" fill="#fff6aa" />
-      </g>
+      {/* The Sun is huge and far away: only part of it shows, cut exactly in half by the top edge. */}
+      <circle cx={CX} cy="0" r="56" fill="url(#sunGlow)" />
+      <circle cx={CX} cy="0" r="22" fill="#fff6aa" />
 
       <g transform={`translate(${CX * (1 - SCALE)} ${TOP - CY * SCALE}) scale(${SCALE})`}>
       <circle cx={CX} cy={CY} r={RING} fill="none" stroke="#2a2a38" strokeDasharray="2 6" />
