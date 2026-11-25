@@ -99,3 +99,17 @@ main { touch-action: pan-y; min-height: 100dvh; }
 .hourtoggle { display: block; margin: 6px auto 0; font: inherit; font-size: 13px; color: var(--dim); background: none; border: 1px solid #2a2a38; border-radius: 999px; padding: 4px 12px; cursor: pointer; }
 
 .thead span:first-child { font-size: 13px; font-weight: 700; color: var(--fg); }
+
+/* live wallpaper version (open the site with /?wallpaper) */
+main.wp { padding-top: max(84px, calc(env(safe-area-inset-top) + 64px)); padding-bottom: 150px; touch-action: auto; }
+.wp .time { margin-bottom: 18px; }
+.wp .view { margin: 0 auto; pointer-events: none; }
+.wp .sunlabel { font-size: clamp(14px, 4vw, 17px); margin: 8px 0 2px; }
+.wp .place { font-size: clamp(14px, 4vw, 17px); }
+.wp .small { font-size: 12px; margin: 0; }
+.wp .next { margin-top: 12px; gap: 6px; }
+.wp .next div { font-size: 13px; padding-top: 6px; }
+@media (max-height: 800px) {
+  main.wp { padding-top: 64px; padding-bottom: 110px; }
+  .wp .time { margin-bottom: 8px; font-size: clamp(48px, 15vw, 80px); }
+}

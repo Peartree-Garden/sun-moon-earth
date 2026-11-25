@@ -11,3 +11,8 @@ export const HOME_LAT = 50.27;        // used for the spin speed (faster near th
 // Phone compasses point to MAGNETIC north. This is the angle from magnetic to true north
 // (positive = magnetic north is east of true north). About +14.5 for Vernon, BC; tune it if the compass seems off.
 export const MAGNETIC_DECLINATION_DEG = 14.5;
+
+// A second marked place on the Earth tab (a second red dot). Set SECOND_NAME to "" to hide it.
+export const SECOND_NAME = "Portugal";
+export const SECOND_LAT = 38.72;      // Lisbon
+export const SECOND_LON = -9.14;

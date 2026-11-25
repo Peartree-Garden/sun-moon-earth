@@ -64,10 +64,13 @@ const toggleHours = () => {
 
   // Swipe left or right anywhere on the screen to change tab (not past the first or last one).
   const touch = useRef(null);
-  const onTouchStart = (e) => { const t = e.touches[0]; touch.current = { x: t.clientX, y: t.clientY }; };
+  const onTouchStart = (e) => {
+  if (e.touches.length > 1) { touch.current = null; return; }     // two fingers = zooming, not swiping
+  const t = e.touches[0]; touch.current = { x: t.clientX, y: t.clientY };
+};
   const onTouchEnd = (e) => {
     const s = touch.current; touch.current = null;
-    if (!s) return;
+    if (!s || e.touches.length > 0) return;
     const t = e.changedTouches[0];
     const dx = t.clientX - s.x, dy = t.clientY - s.y;
     if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;   // too short, or mostly vertical
