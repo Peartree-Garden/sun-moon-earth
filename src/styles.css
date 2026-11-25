@@ -110,6 +110,9 @@ main.wp { padding-top: max(84px, calc(env(safe-area-inset-top) + 64px)); padding
 .wp .next { margin-top: 12px; gap: 6px; }
 .wp .next div { font-size: 13px; padding-top: 6px; }
 @media (max-height: 800px) {
-  main.wp { padding-top: 64px; padding-bottom: 110px; }
+  main.wp { padding-top: 100px; padding-bottom: 70px; }
   .wp .time { margin-bottom: 8px; font-size: clamp(48px, 15vw, 80px); }
+}
+@media (max-height: 760px) {
+  main.wp { padding-top: 64px; padding-bottom: 110px; }
 }
