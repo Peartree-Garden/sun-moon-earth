@@ -5,9 +5,17 @@ import EarthView from "./EarthView.jsx";
 import RiseSet from "./RiseSet.jsx";
 
 // A quiet, non-interactive version of the Earth tab for use as a live wallpaper.
-// Open it with  /?wallpaper  (add &12 for a 12-hour clock). It redraws once a minute to save battery.
+// Open it with  /?wallpaper  (add &12 for a 12-hour clock, &top=130 for more space at the top). It redraws once a minute to save battery.
 const pad = (n) => String(n).padStart(2, "0");
-const twelve = new URLSearchParams(window.location.search).has("12");
+const params = new URLSearchParams(window.location.search);
+const twelve = params.has("12");
+
+// Optional per-phone spacing: /?wallpaper&top=130 moves everything down (pixels). Same for &bottom=.
+const px = (name) => {
+  const v = params.get(name);
+  return v !== null && v !== "" && Number.isFinite(Number(v)) ? Math.min(400, Math.max(0, Number(v))) : undefined;
+};
+const spacing = { paddingTop: px("top"), paddingBottom: px("bottom") };
 
 function clock(now) {
   const t = new Date(now.getTime() + UTC_OFFSET_HOURS * 3600000);
@@ -37,7 +45,7 @@ export default function Wallpaper() {
   const place = describePoint(sun.lat, sun.lon);
 
   return (
-    <main className="wp">
+    <main className="wp" style={spacing}>
       <div className="time" aria-label="Time">{hh}<span className="colon">:</span>{mm}{ampm && <span className="ampm">{ampm}</span>}</div>
       <section>
         <EarthView now={now} interactive={false} />
